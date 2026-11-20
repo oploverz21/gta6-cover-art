@@ -3,20 +3,108 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
+<title>Neon Cover Maker — GTA-style cover art</title>
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 <main class="app">
   <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
+    <h1>Neon Cover Maker</h1>
+    <p class="tag">Turn a photo and a caption into GTA-style cover art. Everything stays on your machine — no uploads, no network.</p>
+
+    <fieldset class="photos">
+      <legend>Photos</legend>
+      <div class="slot">
+        <span class="slot-name">Photo A</span>
+        <img class="thumb" id="thumb-A" alt="Photo A preview">
+        <label class="upload">Choose file <input id="file-A" type="file" accept="image/*"></label>
+        <button id="sample-A" type="button" class="ghost">Use sample</button>
+      </div>
+      <div class="slot">
+        <span class="slot-name">Photo B</span>
+        <img class="thumb" id="thumb-B" alt="Photo B preview">
+        <label class="upload">Choose file <input id="file-B" type="file" accept="image/*"></label>
+        <button id="sample-B" type="button" class="ghost">Use sample</button>
+      </div>
+      <div class="slot">
+        <span class="slot-name">Photo C</span>
+        <img class="thumb" id="thumb-C" alt="Photo C preview">
+        <label class="upload">Choose file <input id="file-C" type="file" accept="image/*"></label>
+        <button id="sample-C" type="button" class="ghost">Use sample</button>
+      </div>
+    </fieldset>
+
+    <fieldset class="panels">
+      <legend>Panels — photo, crop and position</legend>
+      <div class="panel">
+        <span class="panel-name">Hero (left)</span>
+        <label>Photo
+          <select id="p0-photo">
+            <option value="A" selected>Photo A</option>
+            <option value="B">Photo B</option>
+            <option value="C">Photo C</option>
+          </select>
+        </label>
+        <label>Zoom <input id="p0-zoom" type="range" min="1" max="2.5" step="0.05" value="1.05"></label>
+        <label>Left–right <input id="p0-ox" type="range" min="-0.5" max="0.5" step="0.01" value="0.06"></label>
+        <label>Up–down <input id="p0-oy" type="range" min="-0.5" max="0.5" step="0.01" value="0.1"></label>
+      </div>
+      <div class="panel">
+        <span class="panel-name">Top right</span>
+        <label>Photo
+          <select id="p1-photo">
+            <option value="A">Photo A</option>
+            <option value="B" selected>Photo B</option>
+            <option value="C">Photo C</option>
+          </select>
+        </label>
+        <label>Zoom <input id="p1-zoom" type="range" min="1" max="2.5" step="0.05" value="1.1"></label>
+        <label>Left–right <input id="p1-ox" type="range" min="-0.5" max="0.5" step="0.01" value="0"></label>
+        <label>Up–down <input id="p1-oy" type="range" min="-0.5" max="0.5" step="0.01" value="0.15"></label>
+      </div>
+      <div class="panel">
+        <span class="panel-name">Bottom right</span>
+        <label>Photo
+          <select id="p2-photo">
+            <option value="A" selected>Photo A</option>
+            <option value="B">Photo B</option>
+            <option value="C">Photo C</option>
+          </select>
+        </label>
+        <label>Zoom <input id="p2-zoom" type="range" min="1" max="2.5" step="0.05" value="1.7"></label>
+        <label>Left–right <input id="p2-ox" type="range" min="-0.5" max="0.5" step="0.01" value="-0.08"></label>
+        <label>Up–down <input id="p2-oy" type="range" min="-0.5" max="0.5" step="0.01" value="0.08"></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Look</legend>
+      <label>Sunset grade <input id="grade" type="range" min="0" max="100" step="1" value="70"></label>
+      <label class="check"><input id="neon" type="checkbox" checked> Neon boost (saturation + contrast)</label>
+    </fieldset>
+
+    <label class="wide">Caption
+      <input id="caption" type="text" maxlength="40" value="Sunset Heist">
+    </label>
+    <label class="wide">Subtitle
+      <input id="subtitle" type="text" maxlength="24" value="Vice City">
+    </label>
+
+    <div class="sizes" role="group" aria-label="Cover size">
+      <button type="button" data-size="square" class="active">Square 1080×1080</button>
+      <button type="button" data-size="portrait">Portrait 1080×1350</button>
+      <button type="button" data-size="wide">Wide 1920×1080</button>
+    </div>
+
+    <button id="export" type="button" class="primary">Export PNG (current size)</button>
+    <button id="export-all" type="button">Export all three sizes</button>
     <p id="status" role="status"></p>
   </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
+
+  <section class="stage">
+    <canvas id="cover" width="1080" height="1080" aria-label="The cover, live preview"></canvas>
+    <p class="hint">Live preview — what you see is the PNG that exports.</p>
+  </section>
 </main>
 <script type="module" src="./src/main.js"></script>
 </body>
